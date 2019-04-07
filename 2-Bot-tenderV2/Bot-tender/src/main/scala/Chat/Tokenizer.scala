@@ -18,7 +18,21 @@ class Tokenizer(input: String) {
     case "biere" => BIERE
     case "croissant" => CROISSANT
     case "assoiffe" => ASSOIFFE
+    case x if x == "maison" || x == "cailler" || x == "farmer" || x == "boxer" || x == "wittekop" || x== "jackhammer" || x == "punkipa" || x == "tenebreuse" => MARQUE
     case "affame" => AFFAME
+    case "appeller" => APPELLER
+    case "commander" => COMMANDER
+    case "connaitre" => CONNAITRE
+    case "solde" => SOLDE
+    case "couter" => COUTER
+    case "combien" => COMBIEN
+    case "prix" => PRIX
+    case "mon" => MON
+    case "le" => LE
+    case "me" => ME
+    case "de" => DE
+    case "quel" => QUEL
+    case "aurevoir" => AUREVOIR
     case p if p.startsWith("_") && p.length > 1 => PSEUDO // If the word starts with '_' and has more than one character it is a pseudonym.
     case n if n.forall(Character.isDigit) => NUM // If every character is a number, the word thus is a number.
     case _ => UNKNOWN
@@ -27,7 +41,7 @@ class Tokenizer(input: String) {
   def tokenize(): Unit = {
     val words = input
       .trim()
-      .replaceAll("[.|,|!|?|*]", " ") // Remove punctuation.
+      .replaceAll("[.|,|!|?|*]", "") // Remove punctuation.
       .replaceAll(" +|[']", " ") // Remove multiple spaces and replace apostrophes by a space.
       .split(" ")
 

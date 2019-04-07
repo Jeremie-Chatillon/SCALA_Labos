@@ -20,7 +20,27 @@ object Tokens {
   val NUM: Token         = 10
   val UNKNOWN: Token     = 11
   val EOL: Token         = 12
-  // Test
+  // States
   val ASSOIFFE : Token = 13
   val AFFAME : Token = 14
+  // BIERE
+  val MARQUE : Token = 15
+  // CONNECTION
+  val APPELLER : Token = 16
+  // COMMANDE
+  val COMMANDER : Token = 17
+  // SOLDE
+  val CONNAITRE : Token = 18
+  val SOLDE : Token = 19
+  // PRIX
+  val COUTER : Token = 20
+  val COMBIEN : Token = 21
+  val PRIX : Token = 22
+  // Terms
+  val MON : Token = 23
+  val LE : Token = 24
+  val ME : Token = 25
+  val DE : Token = 26
+  val QUEL : Token = 27
+  val AUREVOIR: Token = 28
 }

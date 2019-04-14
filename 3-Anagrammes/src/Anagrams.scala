@@ -38,11 +38,11 @@ object Anagrams extends App {
    */
 
   def fingerPrint(s: Word): FingerPrint = {
-    s.toLowerCase.sorted
+    s.toLowerCase.toList.sorted.mkString // Sorted all the letters of the word to make the fingerPrint
   }
 
   def fingerPrint(s: Sentence): FingerPrint = {
-    fingerPrint(s.mkString)
+    fingerPrint(s.mkString) // take the fingerprint of all the words of the sentence
   }
 
 
@@ -63,7 +63,7 @@ object Anagrams extends App {
 
   /** Returns all the anagrams of a given word. */
   def wordAnagrams(word: Word): List[Word] = {
-    if(matchingWords.contains(fingerPrint(word))) matchingWords(fingerPrint(word)) else List()
+    if(matchingWords.contains(fingerPrint(word))) matchingWords(fingerPrint(word)) else List() // If the words does not have anny matching words, return an empty List
   }
 
   // Test code with for example:
@@ -88,7 +88,7 @@ object Anagrams extends App {
   def subseqs(fp: FingerPrint): List[FingerPrint] = {
     (for {
       i <- 0 to fp.length
-      x <- fp.combinations(i)
+      x <- fp.combinations(i) // Return all the combination of length i with the letter of fp
     } yield x).toList
   }
 
@@ -107,7 +107,7 @@ object Anagrams extends App {
   def subtract(x: FingerPrint, y: FingerPrint): FingerPrint = x.toList.diff(y.toList).mkString
 
   // Test code with for example:
-  println(subtract("", "aabb"))
+  // println(subtract("", "aabb"))
 
 
   /** Returns a list of all anagram sentences of the given sentence.
@@ -130,24 +130,28 @@ object Anagrams extends App {
    */
 
   def sentenceAnagrams(sentence: Sentence): List[Sentence] = {
-    val fpInitial = fingerPrint(sentence)
-    def findAnagrams(fp : FingerPrint, wa : List[Word], curWa: List[Word], acc : Sentence = List(), accSentence: List[Sentence] = List()) : List[Sentence] = {
-      //println(wa + " " + acc + " " + fp + " " + accSentence)
+    def findAnagrams(fp : FingerPrint, wa : List[Word], acc : Sentence = List(), accSentence: List[Sentence] = List()) : List[Sentence] = {
       wa match {
-        case Nil => accSentence //if(!curWa.isEmpty) findAnagrams(fpInitial, curWa.tail, curWa.tail, List(), accSentence) else List()
-        case _ if (fp == "") => acc :: accSentence
+        case Nil => accSentence // this is the end of the list of word anagram possible, return the list of sentence made with the anagram
+        case _ if fp == "" => acc :: accSentence // we used all the letters of the finger print, so it's a correct sentence to saved
         case x::xs => {
+            // check if the fingerprint contain the letter of the first word of the list of possible words anagram list
             if (subtract(x, fp) == "") {
-              findAnagrams(subtract(fp, x), wa, curWa, x :: acc, accSentence) ++ findAnagrams(fp, xs, curWa, acc, accSentence)
+              /*
+              Continue to explore the possiblities with the first word saved
+              and concataine the resut with the result with exploring the other possibilties of the list without saving this word
+              This is not a terminal recursive but didn't find a better way.
+                */
+              findAnagrams(subtract(fp, x), wa, x :: acc, accSentence) ++ findAnagrams(fp, xs, acc, accSentence)
             } else {
-              findAnagrams(fp, xs, curWa, acc, accSentence)
+              // Pass to the next word
+              findAnagrams(fp, xs, acc, accSentence)
             }
         }
       }
     }
-    val wa = subseqs(fpInitial).flatMap(wordAnagrams)
-    val res = findAnagrams(fpInitial, wa, wa)
-    res
+    val fpInitial = fingerPrint(sentence)
+    findAnagrams(fpInitial, subseqs(fpInitial).flatMap(wordAnagrams))
   }
 
 
